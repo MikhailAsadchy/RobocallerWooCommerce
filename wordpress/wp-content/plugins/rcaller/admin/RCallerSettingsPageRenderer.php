@@ -4,18 +4,7 @@ class RCallerSettingsPageRenderer {
 
     public static function render_settings_page() {
         $file = RCallerConstants::PLUGIN_ROOT_DIR . 'admin/views/pluginSettingsPage.php';
-
         include( $file );
-    }
-
-    public static function fetchRCallerSettings() {
-
-        $username = get_option(RCallerAdminConstants::USER_NAME_OPTION);
-        $password = get_option(RCallerAdminConstants::PASSWORD_OPTION);
-
-//        include_once ABSPATH . "wp-includes/option.php";
-
-        return $username . ":" . $password;
     }
 
     public static function saveSettings($userName, $password)

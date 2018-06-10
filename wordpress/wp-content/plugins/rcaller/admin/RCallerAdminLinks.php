@@ -10,8 +10,6 @@ class RCallerAdminLinks {
     }
 
     public static function addOptionsPageMappings($param) {
-        include_once ABSPATH . 'wp-admin/includes/plugin.php';
-
         add_options_page( "RCaller settings", "RCaller settings", 'manage_options', RCallerAdminConstants::ADMIN_OPTIONS_PAGE, array( 'RCallerSettingsPageRenderer', 'render_settings_page' ) );
     }
 

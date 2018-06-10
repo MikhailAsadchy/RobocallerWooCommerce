@@ -86,7 +86,7 @@ class RCallerOrderSender
 
     private function getCustomerName($address)
     {
-        return $address["first_name"] . $address["last_name"];
+        return $address["first_name"] . " " . $address["last_name"];
     }
 }
 ?>
