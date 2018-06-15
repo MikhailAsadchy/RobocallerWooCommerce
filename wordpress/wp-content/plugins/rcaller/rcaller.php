@@ -1,7 +1,4 @@
 <?php
-/**
- * @package Akismet
- */
 /*
 Plugin Name: WooCommerce RCaller
 Plugin URI: https://rcaller.com
@@ -10,25 +7,39 @@ Author: RCaller
 Version: 1.0
 Author URI:
 */
-// Make sure we don't expose any info if called directly
+
+use rcaller\adapter\RCallerAdapterImport;
+use rcaller\adapter\WooCommerceChannelNameProvider;
+use rcaller\adapter\WooCommerceEventService;
+use rcaller\adapter\WooCommerceLogger;
+use rcaller\adapter\WooCommerceOptionsRepository;
+use rcaller\adapter\WooCommerceOrderEntryFieldResolver;
+use rcaller\lib\constants\RCallerConstants;
+use rcaller\lib\ioc\RCallerDependencyContainer;
+use rcaller\lib\RCallerImport;
 const PLUGIN_ACTION_LINKS_EVENT = 'plugin_action_links_';
 
 function import()
 {
     include_once ABSPATH . "wp-includes/option.php";
-    include_once plugin_dir_path(__FILE__) . "RCallerConstants.php";
-    include_once plugin_dir_path(__FILE__) . "admin/RCallerAdminLinks.php";
-    include_once plugin_dir_path(__FILE__) . "admin/RCallerAdminConstants.php";
-    include_once plugin_dir_path(__FILE__) . "admin/RCallerSettingsPageRenderer.php";
-    include_once plugin_dir_path(__FILE__) . "install/RCallerPluginInstallHandler.php";
-    include_once plugin_dir_path(__FILE__) . "uninstall/RCallerPluginUninstallHandler.php";
-    include_once plugin_dir_path(__FILE__) . "client/RCallerOrderSender.php";
+
+    $pluginRoot = plugin_dir_path(__FILE__);
+    include_once $pluginRoot . "lib/util/StrictImporter.php";
+    include_once $pluginRoot . "lib/RCallerImport.php";
+    RCallerImport::importRCallerLib();
+
+    include_once $pluginRoot . "adapter/RCallerAdapterImport.php";
+    RCallerAdapterImport::importRCallerAdapter();
+
+    include_once $pluginRoot . "wooCommerceAdapter/RCallerPlaceOrderHandler.php";
 }
 
-function registerPluginHooks()
+function registerPluginHooks($ioc)
 {
-    register_activation_hook(__FILE__, array('RCallerPluginInstallHandler', 'pluginInstall'));
-    register_deactivation_hook(__FILE__, array('RCallerPluginUninstallHandler', 'pluginUninstall'));
+    $pluginManager = $ioc->getPluginManager();
+
+    register_activation_hook(__FILE__, array($pluginManager, 'addOptions'));
+    register_deactivation_hook(__FILE__, array($pluginManager, 'removeOptions'));
 }
 
 /**
@@ -47,14 +58,14 @@ function isDirectRequest()
     return !function_exists('add_action');
 }
 
-function subscribeEvents()
+function subscribeEvents($ioc)
 {
-    $rcallerClient = new RCallerOrderSender();
-    add_action('admin_menu', array('RCallerAdminLinks', 'addOptionsPageMappings'));
-    add_action('woocommerce_checkout_order_processed', array($rcallerClient, 'sendOrderToRCaller'), 10, 3);
+    $pluginManager = $ioc->getPluginManager();
+    $pluginManager->subscribePlaceOrderEvent();
 
+    add_action('admin_menu', array('rcaller\plugin\RCallerAdminLinks', 'addOptionsPageMappings'));
     $pluginAdminActionLinksEventName = PLUGIN_ACTION_LINKS_EVENT . RCallerConstants::PLUGIN_MAIN_FILE;
-    add_filter($pluginAdminActionLinksEventName, array('RCallerAdminLinks', 'addAdminActionLinks'));
+    add_filter($pluginAdminActionLinksEventName, array('rcaller\plugin\RCallerAdminLinks', 'addAdminActionLinks'));
 }
 
 if (isDirectRequest()) {
@@ -63,6 +74,8 @@ if (isDirectRequest()) {
 include_once ABSPATH . 'wp-admin/includes/plugin.php';
 if (isWooCommercePluginActive()) {
     import();
-    registerPluginHooks();
-    subscribeEvents();
+    $ioc = new RCallerDependencyContainer(new WooCommerceEventService(), new WooCommerceLogger(), new WooCommerceOptionsRepository(), new WooCommerceChannelNameProvider(), new WooCommerceOrderEntryFieldResolver());
+
+    registerPluginHooks($ioc);
+    subscribeEvents($ioc);
 }

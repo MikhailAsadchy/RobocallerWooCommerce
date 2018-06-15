@@ -1,5 +1,5 @@
 <?php
-
+namespace rcaller\plugin;
 
 class RCallerAdminLinks {
 
