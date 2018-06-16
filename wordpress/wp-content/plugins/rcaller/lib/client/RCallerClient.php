@@ -9,13 +9,13 @@ class RCallerClient
 {
     const ENTRIES_DELIMITER = " | ";
 
-    private $credentialsManger;
+    private $credentialsManager;
     private $logger;
     private $rCallerOrderDtoBuilder;
 
-    function __construct($credentialsManger, $logger, $rCallerOrderDtoBuilder)
+    function __construct($credentialsManager, $logger, $rCallerOrderDtoBuilder)
     {
-        $this->credentialsManger = $credentialsManger;
+        $this->credentialsManager = $credentialsManager;
         $this->logger = $logger;
         $this->rCallerOrderDtoBuilder = $rCallerOrderDtoBuilder;
     }
@@ -33,8 +33,8 @@ class RCallerClient
             $validationResult = $this->processAndValidateRequestBody($data);
             
             if (!$validationResult->hasErrors()) {
-                $username = $this->credentialsManger->getUserName();
-                $password = $this->credentialsManger->getPassword();
+                $username = $this->credentialsManager->getUserName();
+                $password = $this->credentialsManager->getPassword();
                 $httpCode = $this->doSendOrderToRCaller($data, $username, $password);
                 $this->logRCallerResponse($httpCode);
             } else {

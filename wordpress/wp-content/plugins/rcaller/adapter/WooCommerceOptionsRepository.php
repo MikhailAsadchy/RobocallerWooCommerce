@@ -7,7 +7,7 @@ class WooCommerceOptionsRepository implements OptionRepository
 {
     public function addOrUpdateOption($name, $value)
     {
-        add_option($name, $value);
+        update_option($name, $value);
     }
 
     public function removeOption($name)

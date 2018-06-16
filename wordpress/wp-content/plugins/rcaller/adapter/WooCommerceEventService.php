@@ -15,6 +15,7 @@ class WooCommerceEventService implements EventService
 
     public function unsubscribePlaceOrderEvent()
     {
-        // we do not need to unsubscribe, cause wordpress invokes hook registration process on each request
+        // we do not need to unsubscribe, cause wordpress
+        // invokes hook registration process on each request
     }
 }

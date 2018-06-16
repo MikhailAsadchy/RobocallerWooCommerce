@@ -1,5 +1,5 @@
 <?php
-namespace rcaller\plugin;
+namespace rcaller\wooCommerceAdapter;
 class RCallerAdminConstants {
 
     const ADMIN_OPTIONS_PAGE = 'configure-rcaller';

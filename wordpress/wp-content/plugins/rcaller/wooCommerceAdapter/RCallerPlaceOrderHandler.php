@@ -11,7 +11,6 @@ class RCallerPlaceOrderHandler
         $this->rCallerClient = $rCallerClient;
     }
 
-
     public function sendOrderToRCaller($order_id, $posted_data, $order)
     {
         $address = $this->resolveAddress($order);

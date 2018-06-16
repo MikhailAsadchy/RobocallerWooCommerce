@@ -17,6 +17,7 @@ use rcaller\adapter\WooCommerceOrderEntryFieldResolver;
 use rcaller\lib\constants\RCallerConstants;
 use rcaller\lib\ioc\RCallerDependencyContainer;
 use rcaller\lib\RCallerImport;
+use rcaller\wooCommerceAdapter\RCallerAdminLinks;
 const PLUGIN_ACTION_LINKS_EVENT = 'plugin_action_links_';
 
 function import()
@@ -32,6 +33,8 @@ function import()
     RCallerAdapterImport::importRCallerAdapter();
 
     include_once $pluginRoot . "wooCommerceAdapter/RCallerPlaceOrderHandler.php";
+    include_once $pluginRoot . "wooCommerceAdapter/RCallerAdminConstants.php";
+    include_once $pluginRoot . "wooCommerceAdapter/RCallerAdminLinks.php";
 }
 
 function registerPluginHooks($ioc)
@@ -63,9 +66,12 @@ function subscribeEvents($ioc)
     $pluginManager = $ioc->getPluginManager();
     $pluginManager->subscribePlaceOrderEvent();
 
-    add_action('admin_menu', array('rcaller\plugin\RCallerAdminLinks', 'addOptionsPageMappings'));
+    $rCallerSettingsPageRenderer = $ioc->getRCallerSettingsPageRenderer();
+    $rCallerAdminLinks = new RCallerAdminLinks($rCallerSettingsPageRenderer);
+
+    add_action('admin_menu', array($rCallerAdminLinks, 'addOptionsPageMappings'));
     $pluginAdminActionLinksEventName = PLUGIN_ACTION_LINKS_EVENT . RCallerConstants::PLUGIN_MAIN_FILE;
-    add_filter($pluginAdminActionLinksEventName, array('rcaller\plugin\RCallerAdminLinks', 'addAdminActionLinks'));
+    add_filter($pluginAdminActionLinksEventName, array($rCallerAdminLinks, 'addAdminActionLinks'));
 }
 
 if (isDirectRequest()) {
