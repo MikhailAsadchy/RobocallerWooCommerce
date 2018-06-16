@@ -17,6 +17,7 @@ class RCallerImport
         array_push($files, $currentFileLocation . "/adapterInterfaces/OrderEntryFieldResolver.php");
         array_push($files, $currentFileLocation . "/client/RCallerClient.php");
         array_push($files, $currentFileLocation . "/constants/RCallerConstants.php");
+        array_push($files, $currentFileLocation . "/constants/RCallerLoggerLevel.php");
         array_push($files, $currentFileLocation . "/dao/credentials/CredentialsManager.php");
         array_push($files, $currentFileLocation . "/dto/formatter/EntryAsStringFormatter.php");
         array_push($files, $currentFileLocation . "/dto/RCallerOrderDtoBuilder.php");

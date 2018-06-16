@@ -3,6 +3,7 @@
 namespace rcaller\lib\client;
 
 use Exception;
+use rcaller\lib\constants\RCallerLoggerLevel;
 use rcaller\lib\validation\ValidationResult;
 
 class RCallerClient
@@ -38,10 +39,10 @@ class RCallerClient
                 $httpCode = $this->doSendOrderToRCaller($data, $username, $password);
                 $this->logRCallerResponse($httpCode);
             } else {
-                $this->logger->log("error", $validationResult);
+                $this->logger->log(RCallerLoggerLevel::ERROR, $validationResult);
             }
         } catch (Exception $e) {
-            $this->logger->log("error", $e->getMessage());
+            $this->logger->log(RCallerLoggerLevel::ERROR, $e->getMessage());
         }
     }
 
@@ -110,11 +111,11 @@ class RCallerClient
     private function logRCallerResponse($httpCode)
     {
         if ($httpCode == 400) {
-            $this->logger->log("error", "RCaller: bad request was sent");
+            $this->logger->log(RCallerLoggerLevel::ERROR, "RCaller: bad request was sent");
         } else if ($httpCode == 401) {
-            $this->logger->log("error", "RCaller: bad credentials");
+            $this->logger->log(RCallerLoggerLevel::ERROR, "RCaller: bad credentials");
         } else if ($httpCode == 403) {
-            $this->logger->log("error", "RCaller: negative balance");
+            $this->logger->log(RCallerLoggerLevel::ERROR, "RCaller: negative balance");
         }
     }
 
