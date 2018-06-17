@@ -3,15 +3,29 @@
 namespace rcaller\lib\client;
 
 use Exception;
+use rcaller\lib\adapterInterfaces\Logger;
 use rcaller\lib\constants\RCallerLoggerLevel;
+use rcaller\lib\dao\credentials\CredentialsManager;
+use rcaller\lib\dto\RCallerOrderDtoBuilder;
 use rcaller\lib\validation\ValidationResult;
 
 class RCallerClient
 {
     const ENTRIES_DELIMITER = " | ";
 
+    /**
+     * @var CredentialsManager
+     */
     private $credentialsManager;
+
+    /**
+     * @var Logger
+     */
     private $logger;
+
+    /**
+     * @var RCallerOrderDtoBuilder
+     */
     private $rCallerOrderDtoBuilder;
 
     function __construct($credentialsManager, $logger, $rCallerOrderDtoBuilder)
@@ -89,6 +103,10 @@ class RCallerClient
         return $httpCode;
     }
 
+    /**
+     * @param $data
+     * @param $validationResult ValidationResult
+     */
     private function validateCustomerPhone($data, $validationResult)
     {
         $customerPhone = $data["customerPhone"];
@@ -108,6 +126,9 @@ class RCallerClient
         }
     }
 
+    /**
+     * @param $httpCode int
+     */
     private function logRCallerResponse($httpCode)
     {
         if ($httpCode == 400) {
@@ -119,6 +140,10 @@ class RCallerClient
         }
     }
 
+    /**
+     * @param $data
+     * @param $validationResult ValidationResult
+     */
     private function validatePriceCurrency($data, $validationResult)
     {
         $priceCurrency = $data["priceCurrency"];
@@ -132,6 +157,10 @@ class RCallerClient
         }
     }
 
+    /**
+     * @param $data
+     * @param $validationResult ValidationResult
+     */
     private function validatePrice($data, $validationResult)
     {
         $price = $data["price"];
@@ -141,6 +170,10 @@ class RCallerClient
         }
     }
 
+    /**
+     * @param $data
+     * @param $validationResult ValidationResult
+     */
     private function validateCustomerNameField($data, $validationResult)
     {
         $customerName = $data["customerName"];
@@ -154,6 +187,10 @@ class RCallerClient
         }
     }
 
+    /**
+     * @param $data
+     * @param $validationResult ValidationResult
+     */
     private function validateCustomerAddressField($data, $validationResult)
     {
         $customerAddress = $data["customerAddress"];
@@ -167,6 +204,10 @@ class RCallerClient
         }
     }
 
+    /**
+     * @param $data
+     * @param $validationResult ValidationResult
+     */
     private function validateEntriesField($data, $validationResult)
     {
         $entries = $data["entries"];
@@ -224,4 +265,3 @@ class RCallerClient
     }
 }
 
-?>

@@ -46,7 +46,7 @@ class RCallerDependencyContainer
         $this->rCallerFormHelper = new RCallerFormHelper($this->credentialsManager, $this->rCallerClient);
         $this->rCallerSettingsPageRenderer = new RCallerSettingsPageRenderer($this->credentialsManager, $this->rCallerClient, $this->rCallerFormHelper);
 
-        $this->rCallerPluginManager = new RCallerPluginManager($optionsRepository, $eventService, $this->rCallerClient);
+        $this->rCallerPluginManager = new RCallerPluginManager($optionsRepository, $eventService, $this->rCallerClient, $this->logger);
     }
 
     /**
@@ -155,4 +155,3 @@ class RCallerDependencyContainer
 
 }
 
-?>

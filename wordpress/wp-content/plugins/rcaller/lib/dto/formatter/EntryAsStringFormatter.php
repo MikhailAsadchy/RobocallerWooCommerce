@@ -1,7 +1,12 @@
 <?
 namespace rcaller\lib\dto\formatter;
+use rcaller\lib\adapterInterfaces\OrderEntryFieldResolver;
+
 class EntryAsStringFormatter
 {
+    /**
+     * @var OrderEntryFieldResolver
+     */
     private $orderEntryFieldResolver;
 
     const ORDER_ENTRY_DELIMITER = " | ";
@@ -25,4 +30,3 @@ class EntryAsStringFormatter
     }
 }
 
-?>

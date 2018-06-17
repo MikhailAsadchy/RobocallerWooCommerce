@@ -7,7 +7,7 @@ use rcaller\wooCommerceAdapter\RCallerPlaceOrderHandler;
 class WooCommerceEventService implements EventService
 {
 
-    public function subscribePlaceOrderEvent($rcallerClient)
+    public function subscribePlaceOrderEvent($rcallerClient, $logger)
     {
         $placeOrderHandler = new RCallerPlaceOrderHandler($rcallerClient);
         add_action('woocommerce_checkout_order_processed', array($placeOrderHandler, 'sendOrderToRCaller'), 10, 3);

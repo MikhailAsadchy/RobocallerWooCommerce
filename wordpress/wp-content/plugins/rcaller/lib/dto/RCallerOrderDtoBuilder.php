@@ -1,8 +1,17 @@
 <?
 namespace rcaller\lib\dto;
+use rcaller\lib\adapterInterfaces\ChannelNameProvider;
+use rcaller\lib\dto\formatter\EntryAsStringFormatter;
+
 class RCallerOrderDtoBuilder
 {
+    /**
+     * @var ChannelNameProvider
+     */
     private $channelNameProvider;
+    /**
+     * @var EntryAsStringFormatter
+     */
     private $entryAsStringFormatter;
 
     public function __construct($channelNameProvider, $entryAsStringFormatter)
@@ -27,4 +36,3 @@ class RCallerOrderDtoBuilder
     }
 }
 
-?>

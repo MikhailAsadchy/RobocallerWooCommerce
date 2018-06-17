@@ -1,11 +1,17 @@
 <?
 
 namespace rcaller\lib\dao\credentials;
+use rcaller\lib\adapterInterfaces\OptionRepository;
 use rcaller\lib\constants\RCallerConstants;
 
 class CredentialsManager
 {
+    /**
+     * @var OptionRepository
+     */
     private $optionsRepository;
+
+
 
     public function __construct($optionsRepository)
     {

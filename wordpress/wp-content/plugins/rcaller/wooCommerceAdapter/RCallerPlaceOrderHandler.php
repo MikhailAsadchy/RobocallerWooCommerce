@@ -2,9 +2,19 @@
 
 namespace rcaller\wooCommerceAdapter;
 
+use rcaller\lib\adapterInterfaces\Logger;
+use rcaller\lib\client\RCallerClient;
+
 class RCallerPlaceOrderHandler
 {
+    /**
+     * @var RCallerClient
+     */
     private $rCallerClient;
+    /**
+     * @var Logger
+     */
+    private $logger;
 
     public function __construct($rCallerClient)
     {
@@ -35,7 +45,7 @@ class RCallerPlaceOrderHandler
             if ($shippingAddress != null) {
                 return $shippingAddress;
             } else {
-                throw new Exception("Unable to retrieve billing or shipping address from order with code " . $order->id);
+                $this->logger->log("error", "Unable to retrieve billing or shipping address from order with code " . $order->id);
             }
         }
     }

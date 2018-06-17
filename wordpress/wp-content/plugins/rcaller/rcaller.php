@@ -37,6 +37,9 @@ function import()
     include_once $pluginRoot . "wooCommerceAdapter/RCallerAdminLinks.php";
 }
 
+/**
+ * @param $ioc RCallerDependencyContainer
+ */
 function registerPluginHooks($ioc)
 {
     $pluginManager = $ioc->getPluginManager();
@@ -61,6 +64,9 @@ function isDirectRequest()
     return !function_exists('add_action');
 }
 
+/**
+ * @param $ioc RCallerDependencyContainer
+ */
 function subscribeEvents($ioc)
 {
     $pluginManager = $ioc->getPluginManager();

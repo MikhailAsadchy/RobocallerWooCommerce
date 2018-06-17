@@ -1,12 +1,21 @@
 <?
 
 namespace rcaller\lib\ui;
+use rcaller\lib\client\RCallerClient;
+use rcaller\lib\dao\credentials\CredentialsManager;
+
 class RCallerFormHelper
 {
     const SETTINGS_FORM_USERNAME = "rcaller_username";
     const SETTINGS_FORM_PASSWORD = "rcaller_password";
 
+    /**
+     * @var CredentialsManager
+     */
     private $credentialsManager;
+    /**
+     * @var RCallerClient
+     */
     private $rCallerClient;
 
     /**
@@ -125,7 +134,7 @@ class RCallerFormHelper
     }
 
     /**
-     * @param $httpCode
+     * @param $httpCode int
      * @return string
      */
     private function processResponse($httpCode)

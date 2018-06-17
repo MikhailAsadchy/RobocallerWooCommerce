@@ -2,10 +2,23 @@
 
 namespace rcaller\lib\settings;
 
+use rcaller\lib\client\RCallerClient;
+use rcaller\lib\dao\credentials\CredentialsManager;
+use rcaller\lib\ui\RCallerFormHelper;
+
 class RCallerSettingsPageRenderer
 {
+    /**
+     * @var CredentialsManager
+     */
     private $credentialsManager;
+    /**
+     * @var RCallerClient
+     */
     private $rCallerClient;
+    /**
+     * @var RCallerFormHelper
+     */
     private $rCallerFormHelper;
 
     /**
