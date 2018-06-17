@@ -26,6 +26,7 @@ class RCallerImport
         array_push($files, $currentFileLocation . "/settings/RCallerSettingsPageRenderer.php");
         array_push($files, $currentFileLocation . "/validation/ValidationError.php");
         array_push($files, $currentFileLocation . "/validation/ValidationResult.php");
+        array_push($files, $currentFileLocation . "/ui/RCallerFormHelper.php");
 
         StrictImporter::importFiles($files);
     }

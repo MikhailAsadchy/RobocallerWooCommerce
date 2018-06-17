@@ -4,52 +4,30 @@ namespace rcaller\lib\settings;
 
 class RCallerSettingsPageRenderer
 {
-    const SETTINGS_FORM_USERNAME = "rcaller_username";
-    const SETTINGS_FORM_PASSWORD = "rcaller_password";
-
     private $credentialsManager;
     private $rCallerClient;
+    private $rCallerFormHelper;
 
-    public function __construct($credentialsManager, $rCallerClient)
+    /**
+     * RCallerSettingsPageRenderer constructor.
+     * @param $credentialsManager
+     * @param $rCallerClient
+     * @param $rCallerFormHelper
+     */
+    public function __construct($credentialsManager, $rCallerClient, $rCallerFormHelper)
     {
         $this->credentialsManager = $credentialsManager;
         $this->rCallerClient = $rCallerClient;
+        $this->rCallerFormHelper = $rCallerFormHelper;
     }
+
 
     public function renderSettingsPage()
     {
-        $checkCredentialsStatus = "";
-        if ($this->isPostMethod() && $this->shouldHandlePost()) {
-            if ($this->isCheckCredentialsRequest()) {
-                $checkCredentialsStatus = $this->doCheckCredentials();
-                if ($checkCredentialsStatus === "success") {
-                    $this->doSaveSettings();
-                }
-            } else if ($this->isSaveSettingsRequest()) {
-                $this->doSaveSettings();
-            }
-        }
+        $checkCredentialsStatus = $this->rCallerFormHelper->processFormSubmission();
         $username = $this->credentialsManager->getUserName();
         $password = $this->credentialsManager->getPassword();
         echo $this->renderSettingsPageInternal($checkCredentialsStatus, $username, $password);
-    }
-
-    /**
-     * @param $httpCode
-     * @return string
-     */
-    private function processResponse($httpCode)
-    {
-        if ($httpCode === 200) {
-            $checkCredentialsResult = "success";
-        } else if ($httpCode === 401) {
-            $checkCredentialsResult = "bad credentials";
-        } else if ($httpCode == 403) {
-            $checkCredentialsResult = "You have negative balance, so the requests to rcaller will not be sent";
-        } else {
-            $checkCredentialsResult = "unknown error";
-        }
-        return $checkCredentialsResult;
     }
 
     /**
@@ -60,20 +38,7 @@ class RCallerSettingsPageRenderer
      */
     private function renderSettingsPageInternal($checkCredentialsStatus, $username, $password)
     {
-        return $this->renderSettingsTitle() . $this->renderSettingsForm($username, $password) . $this->renderCheckCredentialsStatus($checkCredentialsStatus);
-    }
-
-    /**
-     * @param $checkCredentialsStatus
-     * @return string
-     */
-    private function renderCheckCredentialsStatus($checkCredentialsStatus)
-    {
-        if (!empty($checkCredentialsStatus)) {
-            return "<div>RCaller credentials status: " . $checkCredentialsStatus . "</div>";
-        } else {
-            return "";
-        }
+        return $this->rCallerFormHelper->renderSettingsTitle() . $this->renderSettingsForm($username, $password) . $this->rCallerFormHelper->renderCheckCredentialsStatus($checkCredentialsStatus);
     }
 
     /**
@@ -85,68 +50,11 @@ class RCallerSettingsPageRenderer
     {
         return "
     <form method=\"post\">
-        <input name=\"" . self::SETTINGS_FORM_USERNAME . "\" type=\"text\" size=\"25\"
-               value=\"" . $username . "\">
-        <input name=\"" . self::SETTINGS_FORM_PASSWORD . "\" type=\"password\" size=\"25\"
-               value=\"" . $password . "\">
-        <input type=\"submit\" name=\"checkCredentials\" value=\"Check credentials\">
-        <input type=\"submit\" name=\"save\" value=\"Save\">
+        " . $this->rCallerFormHelper->renderUserNameField($username) . $this->rCallerFormHelper->renderPasswordField($password)
+            . $this->rCallerFormHelper->renderCheckCredentialsButton() .
+            $this->rCallerFormHelper->renderSaveButton() . "
     </form> 
     ";
     }
 
-    /**
-     * @return string
-     */
-    private function renderSettingsTitle()
-    {
-        return "<div>Configure RCaller credentials</div>";
-    }
-
-    /**
-     * @return mixed
-     */
-    private function isCheckCredentialsRequest()
-    {
-        return $_POST["checkCredentials"];
-    }
-
-    /**
-     * @return mixed
-     */
-    private function isSaveSettingsRequest()
-    {
-        return $_POST["save"];
-    }
-
-    /**
-     * @return bool
-     */
-    private function shouldHandlePost()
-    {
-        return $this->isCheckCredentialsRequest() || $this->isSaveSettingsRequest();
-    }
-
-    /**
-     * @return bool
-     */
-    private function isPostMethod()
-    {
-        return $_SERVER['REQUEST_METHOD'] === 'POST';
-    }
-
-    private function doCheckCredentials()
-    {
-        $userName = $_POST[self::SETTINGS_FORM_USERNAME];
-        $password = $_POST[self::SETTINGS_FORM_PASSWORD];
-        $responseCode = $this->rCallerClient->checkRCallerCredentials($userName, $password);
-        return $this->processResponse($responseCode);
-    }
-
-    private function doSaveSettings()
-    {
-        $userName = $_POST[self::SETTINGS_FORM_USERNAME];
-        $password = $_POST[self::SETTINGS_FORM_PASSWORD];
-        $this->credentialsManager->storeCredentials($userName, $password);
-    }
 }
