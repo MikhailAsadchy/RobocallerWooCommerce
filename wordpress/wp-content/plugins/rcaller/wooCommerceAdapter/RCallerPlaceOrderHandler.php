@@ -25,14 +25,16 @@ class RCallerPlaceOrderHandler
     {
         $address = $this->resolveAddress($order);
 
-        $total = $order->data["total"];
-        $entries = $order->items;
-        $addressLine = $address["address_1"];
-        $phone = $address["phone"];
-        $customerName = $this->getCustomerName($address);
-        $currency = $order->data["currency"];
+        if ($address != null) {
+            $total = $order->data["total"];
+            $entries = $order->items;
+            $addressLine = $address["address_1"];
+            $phone = $address["phone"];
+            $customerName = $this->getCustomerName($address);
+            $currency = $order->data["currency"];
 
-        $this->rCallerClient->sendOrderToRCaller($total, $entries, $addressLine, $phone, $customerName, $currency);
+            $this->rCallerClient->sendOrderToRCaller($total, $entries, $addressLine, $phone, $customerName, $currency);
+        }
     }
 
     private function resolveAddress($order)
@@ -46,6 +48,7 @@ class RCallerPlaceOrderHandler
                 return $shippingAddress;
             } else {
                 $this->logger->log("error", "Unable to retrieve billing or shipping address from order with code " . $order->id);
+                return null;
             }
         }
     }
