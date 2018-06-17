@@ -81,6 +81,77 @@ class RCallerDependencyContainer
         return $this->rCallerFormHelper;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getChannelNameProvider()
+    {
+        return $this->channelNameProvider;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEventService()
+    {
+        return $this->eventService;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLogger()
+    {
+        return $this->logger;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOptionsRepository()
+    {
+        return $this->optionsRepository;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOrderEntryFieldResolver()
+    {
+        return $this->orderEntryFieldResolver;
+    }
+
+    /**
+     * @return CredentialsManager
+     */
+    public function getCredentialsManager()
+    {
+        return $this->credentialsManager;
+    }
+
+    /**
+     * @return RCallerOrderDtoBuilder
+     */
+    public function getRCallerOrderDtoBuilder()
+    {
+        return $this->rCallerOrderDtoBuilder;
+    }
+
+    /**
+     * @return RCallerPluginManager
+     */
+    public function getRCallerPluginManager()
+    {
+        return $this->rCallerPluginManager;
+    }
+
+    /**
+     * @return EntryAsStringFormatter
+     */
+    public function getEntryAsStringFormatter()
+    {
+        return $this->entryAsStringFormatter;
+    }
 
 }
 
