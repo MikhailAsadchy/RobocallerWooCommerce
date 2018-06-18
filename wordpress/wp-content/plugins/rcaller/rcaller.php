@@ -25,7 +25,6 @@ function import()
     include_once ABSPATH . "wp-includes/option.php";
 
     $pluginRoot = plugin_dir_path(__FILE__);
-    include_once $pluginRoot . "lib/util/StrictImporter.php";
     include_once $pluginRoot . "lib/RCallerImport.php";
     RCallerImport::importRCallerLib();
 
