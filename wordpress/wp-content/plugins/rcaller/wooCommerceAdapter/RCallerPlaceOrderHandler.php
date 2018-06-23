@@ -26,6 +26,7 @@ class RCallerPlaceOrderHandler
         $address = $this->resolveAddress($order);
 
         if ($address != null) {
+            $externalOrderId = $order->id;
             $total = $order->data["total"];
             $entries = $order->items;
             $addressLine = $address["address_1"];
@@ -33,7 +34,7 @@ class RCallerPlaceOrderHandler
             $customerName = $this->getCustomerName($address);
             $currency = $order->data["currency"];
 
-            $this->rCallerClient->sendOrderToRCaller($total, $entries, $addressLine, $phone, $customerName, $currency);
+            $this->rCallerClient->sendOrderToRCaller($externalOrderId, $total, $entries, $addressLine, $phone, $customerName, $currency);
         }
     }
 
